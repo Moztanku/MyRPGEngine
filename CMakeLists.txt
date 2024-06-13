@@ -13,9 +13,10 @@ set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
 set(INC_DIR ${CMAKE_SOURCE_DIR}/inc)
 
 ## External dependencies
-# - GLAD
-# - STB_image
-# - JacekLib
+# - GLAD            (OpenGL loader)
+# - STB_image       (Image loading)
+# - JacekLib        (My library with utilities)
+# - EnTT            (Entity-Component-System library)
 
 add_subdirectory(${VENDOR_DIR})
 
@@ -45,4 +46,4 @@ add_executable(${PROJECT_NAME})
 target_sources(${PROJECT_NAME} PRIVATE ${SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE ${INC_DIR})
 target_link_libraries(${PROJECT_NAME} PRIVATE
-    GL glfw JacekLib GLAD STB_image)
+    GL glfw JacekLib GLAD STB_image EnTT)

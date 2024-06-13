@@ -65,4 +65,22 @@ endif()
 
 add_subdirectory(${JacekLib_DIR})
 
+## EnTT
+
+## vendor/EnTT
+set(EnTT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/EnTT)
+# Link to EnTT v3.13.2 archive
+set(EnTT_URL "https://github.com/skypjack/entt/releases/download/v3.13.2/entt-v3.13.2.tar.gz")
+
+if (NOT EXISTS ${EnTT_DIR})
+    file(DOWNLOAD ${EnTT_URL} ${EnTT_DIR}/entt.tar.gz SHOW_PROGRESS)
+    file(ARCHIVE_EXTRACT
+        INPUT ${EnTT_DIR}/entt.tar.gz
+        DESTINATION ${EnTT_DIR})
+
+    file(REMOVE ${EnTT_DIR}/entt.tar.gz)
+endif()
+
+add_subdirectory(${EnTT_DIR})
+
 ###
