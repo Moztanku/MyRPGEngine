@@ -21,6 +21,9 @@ set(INC_DIR ${CMAKE_SOURCE_DIR}/inc)
 add_subdirectory(${VENDOR_DIR})
 
 ## OpenGL libraries
+# - OpenGL          (Graphics)
+# - glfw3           (Window and input)
+# - glm             (Mathematics)
 
 set(OpenGL_Packages
     OpenGL
@@ -46,4 +49,10 @@ add_executable(${PROJECT_NAME})
 target_sources(${PROJECT_NAME} PRIVATE ${SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE ${INC_DIR})
 target_link_libraries(${PROJECT_NAME} PRIVATE
-    GL glfw JacekLib GLAD STB_image EnTT)
+    STB_image
+    JacekLib
+    glfw
+    GLAD
+    EnTT
+    glm
+    GL)
