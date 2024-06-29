@@ -3,13 +3,14 @@
 #include "jac/print.hpp"
 
 #include "utils/defaults.hpp"
+#include "Events/GLFWEventHandlers.hpp"
 
 namespace
 {
 
 auto init_glfw() -> bool
 {
-    using def = utils::defaults;
+    namespace def = utils::defaults;
 
     if (!glfwInit())
     {
@@ -32,6 +33,13 @@ auto init_glfw() -> bool
         def::opengl_minor_version
     );
 
+    #ifdef __APPLE__
+    glfwWindowHint(
+        GLFW_OPENGL_FORWARD_COMPAT,
+        GL_TRUE
+    );
+    #endif
+
     glfwWindowHint(
         GLFW_OPENGL_PROFILE,
         def::opengl_profile == 0 ? GLFW_OPENGL_CORE_PROFILE :
@@ -40,6 +48,18 @@ auto init_glfw() -> bool
     );
 
     return true;
+}
+
+auto set_event_callbacks(GLFWwindow* window) -> void
+{
+    namespace handlers = Events::GLFWEventHandlers;
+
+    glfwSetFramebufferSizeCallback(window, handlers::framebuffer_size_callback);
+
+    glfwSetKeyCallback(window, handlers::key_callback);
+
+    glfwSetMouseButtonCallback(window, handlers::mouse_button_callback);
+    glfwSetCursorPosCallback(window, handlers::cursor_pos_callback);
 }
 
 } // namespace
@@ -73,10 +93,8 @@ Window::Window(const Settings& settings)
     }
 
     glfwMakeContextCurrent(m_Window.get());
-    glfwSetFramebufferSizeCallback(m_Window.get(), [](GLFWwindow* /* window */, int width, int height)
-    {
-        glViewport(0, 0, width, height);
-    });
+
+    set_event_callbacks(m_Window.get());
 }
 
 } // namespace Renderer

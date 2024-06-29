@@ -30,12 +30,15 @@ class Window
 
         Window();
         Window(const Settings& settings);
-        ~Window();
+        ~Window() = default;
 
         Window(const Window&) = delete;
         Window(Window&&) = delete;
         auto operator=(const Window&) -> Window& = delete;
         auto operator=(Window&&) -> Window& = delete;
+
+        // Just for testing, remove later
+        auto getWindow() -> GLFWwindow& { return *m_Window; }
     private:
         unique_ptr<
             GLFWwindow,
