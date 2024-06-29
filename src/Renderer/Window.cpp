@@ -16,9 +16,8 @@ auto init_glfw() -> bool
     {
         int ec = glfwGetError(nullptr);
 
-        jac::print_error(
-            jac::make_message("Failed to initialize GLFW, error code: ", ec)
-        );
+        jac::print_error({
+            "Failed to initialize GLFW, error code:", ec});
 
         return false;
     }
@@ -85,9 +84,8 @@ Window::Window(const Settings& settings)
     {
         int ec = glfwGetError(nullptr);
 
-        jac::print_error(
-            jac::make_message("Failed to create window, error code: ", ec)
-        );
+        jac::print_error({
+            "Failed to create window, error code:", ec});
 
         return;
     }

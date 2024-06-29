@@ -56,9 +56,8 @@ namespace GLFWEventHandlers
         int width,
         int height
     ){
-        jac::print_info(
-            jac::make_message(
-                "Framebuffer size changed to: ", width, "x", height));
+        jac::print_info({
+                "Framebuffer size changed to:", width, "x", height});
         
         // glViewport(0, 0, width, height); // TODO: Need to call this in the renderer with existing OpengL context
     };
@@ -76,12 +75,11 @@ namespace GLFWEventHandlers
         int action,
         int mods
     ){
-        jac::print_info(
-            jac::make_message(
-                "Key pressed: ", key,
-                " scancode: ", scancode,
-                " action: ", action,
-                " mods: ", mods));
+        jac::print_info({
+            "Key pressed:", key,
+            "scancode:", scancode,
+            "action:", action,
+            "mods:", mods});
     };
 
     // Unicode character input (layout dependent as opposed to key input)
@@ -99,11 +97,10 @@ namespace GLFWEventHandlers
         int action,
         int mods
     ){
-        jac::print_info(
-            jac::make_message(
-                "Mouse button pressed: ", button,
-                " action: ", action,
-                " mods: ", mods));
+        jac::print_info({
+            "Mouse button pressed:", button,
+            "action:", action,
+            "mods:", mods});
     };
     
     // cursor position change
@@ -113,8 +110,7 @@ namespace GLFWEventHandlers
         double ypos
     ){
         jac::print_info(
-            jac::make_message(
-                "Cursor position: ", xpos, ", ", ypos));
+            {"Cursor position:", xpos, ypos});
     };
     
     // cursor enters or leaves window
