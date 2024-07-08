@@ -9,6 +9,7 @@
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 
+#include <entt/signal/dispatcher.hpp>
 #include <entt/entity/registry.hpp>
 
 #include "jac/print.hpp"

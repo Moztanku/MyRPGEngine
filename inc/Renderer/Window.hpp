@@ -37,6 +37,9 @@ class Window
         auto operator=(const Window&) -> Window& = delete;
         auto operator=(Window&&) -> Window& = delete;
 
+        auto pollInput() -> void;
+        auto isAlive() const -> bool;
+
         // Just for testing, remove later
         auto getWindow() -> GLFWwindow& { return *m_Window; }
     private:
@@ -44,6 +47,8 @@ class Window
             GLFWwindow,
             decltype(&glfwDestroyWindow)
         > m_Window = {nullptr, glfwDestroyWindow};
+
+        bool m_alive{false};
 };
 
 } // namespace Renderer

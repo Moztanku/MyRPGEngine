@@ -91,8 +91,19 @@ Window::Window(const Settings& settings)
     }
 
     glfwMakeContextCurrent(m_Window.get());
-
     set_event_callbacks(m_Window.get());
+
+    m_alive = true;
+}
+
+auto Window::pollInput() -> void
+{
+    glfwPollEvents();
+}
+
+auto Window::isAlive() const -> bool
+{
+    return m_alive;
 }
 
 } // namespace Renderer
