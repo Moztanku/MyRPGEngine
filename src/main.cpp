@@ -117,8 +117,6 @@ auto run(jac::Arguments& /* arg */, jac::Arguments& /* env */) -> int
 
     while (window.isAlive())
     {
-        window.pollInput();
-
         // for (auto& event : Events::getEvents())
         // {
         //     bool handled = handle_event(event);
@@ -132,6 +130,7 @@ auto run(jac::Arguments& /* arg */, jac::Arguments& /* env */) -> int
         // }
 
         // renderer.render();
+        window.update();
     }
 
     // entt::dispatcher dispatcher{};

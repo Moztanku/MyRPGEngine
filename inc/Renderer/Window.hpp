@@ -37,7 +37,7 @@ class Window
         auto operator=(const Window&) -> Window& = delete;
         auto operator=(Window&&) -> Window& = delete;
 
-        auto pollInput() -> void;
+        auto update() -> void;
         auto isAlive() const -> bool;
 
         // Just for testing, remove later

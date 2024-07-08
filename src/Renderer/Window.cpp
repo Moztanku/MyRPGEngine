@@ -66,6 +66,10 @@ auto set_event_callbacks(GLFWwindow* window) -> void
 namespace Renderer
 {
 
+Window::Window() : Window(Settings{})
+{
+}
+
 Window::Window(const Settings& settings)
 {
     if (init_glfw() == false)
@@ -96,8 +100,12 @@ Window::Window(const Settings& settings)
     m_alive = true;
 }
 
-auto Window::pollInput() -> void
+auto Window::update() -> void
 {
+    if (m_alive == false)
+        return;
+
+    glfwSwapBuffers(m_Window.get());
     glfwPollEvents();
 }
 
