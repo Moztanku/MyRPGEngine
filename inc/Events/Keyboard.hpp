@@ -17,7 +17,7 @@ struct KeyboardInput
 {
     enum struct Action : uint8
     {
-        Press,
+        Press = 0u,
         Release,
         Repeat
     };

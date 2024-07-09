@@ -9,10 +9,11 @@
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 
-#include <entt/signal/dispatcher.hpp>
-#include <entt/entity/registry.hpp>
-
-#include "jac/print.hpp"
+#include "Events/EventRegistry.hpp"
+#include "Events/Keyboard.hpp"
+#include "Events/Mouse.hpp"
+#include "Events/Controller.hpp"
+#include "Events/Window.hpp"
 
 namespace Events
 {
@@ -76,11 +77,15 @@ namespace GLFWEventHandlers
         int action,
         int mods
     ){
-        jac::print_info({
-            "Key pressed:", key,
-            "scancode:", scancode,
-            "action:", action,
-            "mods:", mods});
+        KeyboardInput input = {
+            .key = key,
+            .scancode = scancode,
+            .action = static_cast<KeyboardInput::Action>(action),
+            .mods = static_cast<uint>(mods)
+        };
+
+        EventRegistry::CreateEvent(
+            std::move(input));
     };
 
     // Unicode character input (layout dependent as opposed to key input)
@@ -96,12 +101,15 @@ namespace GLFWEventHandlers
         GLFWwindow* /* window */,
         int button,
         int action,
-        int mods
+        int /* mods */
     ){
-        jac::print_info({
-            "Mouse button pressed:", button,
-            "action:", action,
-            "mods:", mods});
+        MouseButtonInput input = {
+            .button = static_cast<MouseButtonInput::Button>(button),
+            .action = static_cast<MouseButtonInput::Action>(action)
+        };
+
+        EventRegistry::CreateEvent(
+            std::move(input));
     };
     
     // cursor position change
@@ -110,15 +118,40 @@ namespace GLFWEventHandlers
         double xpos,
         double ypos
     ){
-        jac::print_info(
-            {"Cursor position:", xpos, ypos});
+        static double last_xpos = xpos;
+        static double last_ypos = ypos;
+
+        MouseMoveInput input = {
+            .x = xpos,
+            .y = ypos,
+            .dx = xpos - last_xpos,
+            .dy = ypos - last_ypos
+        };
+
+        last_xpos = xpos;
+        last_ypos = ypos;
+
+        EventRegistry::CreateEvent(
+            std::move(input));
     };
     
     // cursor enters or leaves window
     constexpr GLFWcursorenterfun cursor_enter_callback = nullptr;
 
     // scroll input
-    constexpr GLFWscrollfun scroll_callback = nullptr;
+    constexpr GLFWscrollfun scroll_callback = [](
+        GLFWwindow* /* window */,
+        double xoffset,
+        double yoffset
+    ){
+        MouseScrollInput input = {
+            .x = xoffset,
+            .y = yoffset
+        };
+
+        EventRegistry::CreateEvent(
+            std::move(input));
+    };
 
     // file drop input
     constexpr GLFWdropfun drop_callback = nullptr;

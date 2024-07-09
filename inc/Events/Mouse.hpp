@@ -13,27 +13,17 @@ namespace Events
 {
 
 ECS_COMPONENT
-struct MouseMoveInput
-{
-    float x;
-    float y;
-
-    float dx;
-    float dy;
-};
-
-ECS_COMPONENT
 struct MouseButtonInput
 {
     enum struct Action : uint8
     {
-        Press,
-        Release
+        Release = 0u,
+        Press
     };
 
     enum struct Button : uint8
     {
-        Left,
+        Left = 0u,
         Right,
         Middle,
         Button4,
@@ -48,10 +38,20 @@ struct MouseButtonInput
 };
 
 ECS_COMPONENT
+struct MouseMoveInput
+{
+    double x;
+    double y;
+
+    double dx;
+    double dy;
+};
+
+ECS_COMPONENT
 struct MouseScrollInput
 {
-    float x;
-    float y;
+    double x;
+    double y;
 };
 
 } // namespace Events

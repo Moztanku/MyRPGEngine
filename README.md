@@ -49,8 +49,9 @@ cmake --build build
 - - Collision detection
 - - Trigger zones
 - Event Handling
-- - Integrate with ECS
-- - Keyboard & Mouse input
+- - ~~Integrate with ECS~~
+- - ~~Keyboard & Mouse input~~
+- - Window events
 - - Timers
 - - (Maybe) Gamepad input
 - - (Maybe) Networking

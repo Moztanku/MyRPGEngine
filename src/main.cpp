@@ -10,9 +10,24 @@
 
 #include "Renderer/Window.hpp"
 
+struct Component
+{
+    static auto on_construct(entt::registry& /* registry */, entt::entity entity) -> void
+    {
+        jac::print_info({"Entity created: ", static_cast<int>(entity)});
+    }
+};
+
 auto run(jac::Arguments& /* arg */, jac::Arguments& /* env */) -> int
 {
 
+    // entt::registry registry{};
+    // registry.on_construct<Component>().connect<&Component::on_construct>();
+
+    // auto entity = registry.create();
+    // registry.emplace<Component>(entity);
+
+    // registry.create<Component>();
     // /*
     //     START:
 
