@@ -40,8 +40,6 @@ class Window
         auto update() -> void;
         auto isAlive() const -> bool;
 
-        // Just for testing, remove later
-        auto getWindow() -> GLFWwindow& { return *m_Window; }
     private:
         unique_ptr<
             GLFWwindow,
@@ -49,6 +47,8 @@ class Window
         > m_Window = {nullptr, glfwDestroyWindow};
 
         bool m_alive{false};
+
+        auto handleWindowEvents() -> void;
 };
 
 } // namespace Renderer

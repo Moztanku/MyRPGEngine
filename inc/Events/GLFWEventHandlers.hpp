@@ -24,7 +24,13 @@ namespace GLFWEventHandlers
     //// GENERAL EVENTS ////
 
     // called when an error occurs
-    constexpr GLFWerrorfun error_callback = nullptr;
+    constexpr GLFWerrorfun error_callback = [](
+        int error,
+        const char* description
+    ){
+        jac::print_error({
+            error, "GLFW error:", description});
+    };
 
     // monitor configuration change
     constexpr GLFWmonitorfun monitor_callback = nullptr;
@@ -34,23 +40,103 @@ namespace GLFWEventHandlers
     // window position change
     constexpr GLFWwindowposfun window_pos_callback = nullptr;
 
+    //// Unsupported in Wayland
+    // constexpr GLFWwindowposfun window_pos_callback = [](
+    //     GLFWwindow* /* window */,
+    //     int xpos,
+    //     int ypos
+    // ){
+    // };
+
     // window size change
-    constexpr GLFWwindowsizefun window_size_callback = nullptr;
+    constexpr GLFWwindowsizefun window_size_callback = [](
+        GLFWwindow* /* window */,
+        int width,
+        int height
+    ){
+        WindowSizeEvent event = {
+            .width = static_cast<uint32>(width),
+            .height = static_cast<uint32>(height)
+        };
+
+        EventRegistry::CreateEvent(
+            std::move(event));
+    };
 
     // window close request
-    constexpr GLFWwindowclosefun window_close_callback = nullptr;
+    constexpr GLFWwindowclosefun window_close_callback = [](
+        GLFWwindow* /* window */
+    ){
+        WindowEvent event = {
+            .action = WindowEvent::Action::Close
+        };
+
+        EventRegistry::CreateEvent(
+            std::move(event));
+    };
 
     // window content needs to be redrawn
-    constexpr GLFWwindowrefreshfun window_refresh_callback = nullptr;
+    constexpr GLFWwindowrefreshfun window_refresh_callback = [](
+        GLFWwindow* /* window */
+    ){
+        WindowEvent event = {
+            .action = WindowEvent::Action::Refresh
+        };
+
+        EventRegistry::CreateEvent(
+            std::move(event));
+    };
 
     // window gains or loses focus
-    constexpr GLFWwindowfocusfun window_focus_callback = nullptr;
+    constexpr GLFWwindowfocusfun window_focus_callback = [](
+        GLFWwindow* /* window */,
+        int focused
+    ){
+        WindowEvent event = {
+            .action = focused ? WindowEvent::Action::Focus
+                              : WindowEvent::Action::LostFocus
+        };
+
+        EventRegistry::CreateEvent(
+            std::move(event));
+    };
 
     // window is iconified or restored
     constexpr GLFWwindowiconifyfun window_iconify_callback = nullptr;
 
+    //// Not working properly
+    // constexpr GLFWwindowiconifyfun window_iconify_callback = [](
+    //     GLFWwindow* /* window */,
+    //     int iconified
+    // ){
+    //     WindowEvent event = {
+    //         .action = iconified ? WindowEvent::Action::Minimize
+    //                             : WindowEvent::Action::Restore
+    //     };
+
+    //     jac::print_info({
+    //         "Window iconified: ", iconified});
+
+    //     EventRegistry::CreateEvent(
+    //         std::move(event));
+    // };
+
     // window is maximized or restored
-    constexpr GLFWwindowmaximizefun window_maximize_callback = nullptr;
+    constexpr GLFWwindowmaximizefun window_maximize_callback = [](
+        GLFWwindow* /* window */,
+        int maximized
+    ){
+        WindowEvent event = {
+            .action = maximized ? WindowEvent::Action::Maximize
+                                : WindowEvent::Action::Restore
+        };
+
+        EventRegistry::CreateEvent(
+            std::move(event));
+    };
+
+    // window content scale change
+    constexpr GLFWwindowcontentscalefun window_content_scale_callback = nullptr;
 
     // framebuffer size change
     constexpr GLFWframebuffersizefun framebuffer_size_callback = [](
@@ -58,14 +144,14 @@ namespace GLFWEventHandlers
         int width,
         int height
     ){
-        jac::print_info({
-                "Framebuffer size changed to:", width, "x", height});
-        
-        // glViewport(0, 0, width, height); // TODO: Need to call this in the renderer with existing OpengL context
-    };
+        FramebufferSizeEvent event = {
+            .width = static_cast<uint32>(width),
+            .height = static_cast<uint32>(height)
+        };
 
-    // window content scale change
-    constexpr GLFWwindowcontentscalefun window_content_scale_callback = nullptr;
+        EventRegistry::CreateEvent(
+            std::move(event));
+    };
 
     //// KEYBOARD INPUT ////
 
@@ -77,15 +163,15 @@ namespace GLFWEventHandlers
         int action,
         int mods
     ){
-        KeyboardInput input = {
+        KeyboardEvent event = {
             .key = key,
             .scancode = scancode,
-            .action = static_cast<KeyboardInput::Action>(action),
-            .mods = static_cast<uint>(mods)
+            .action = static_cast<KeyboardEvent::Action>(action),
+            .mods = static_cast<uint8>(mods)
         };
 
         EventRegistry::CreateEvent(
-            std::move(input));
+            std::move(event));
     };
 
     // Unicode character input (layout dependent as opposed to key input)
@@ -103,13 +189,13 @@ namespace GLFWEventHandlers
         int action,
         int /* mods */
     ){
-        MouseButtonInput input = {
-            .button = static_cast<MouseButtonInput::Button>(button),
-            .action = static_cast<MouseButtonInput::Action>(action)
+        MouseButtonEvent event = {
+            .button = static_cast<MouseButtonEvent::Button>(button),
+            .action = static_cast<MouseButtonEvent::Action>(action)
         };
 
         EventRegistry::CreateEvent(
-            std::move(input));
+            std::move(event));
     };
     
     // cursor position change
@@ -121,7 +207,7 @@ namespace GLFWEventHandlers
         static double last_xpos = xpos;
         static double last_ypos = ypos;
 
-        MouseMoveInput input = {
+        MouseMoveEvent event = {
             .x = xpos,
             .y = ypos,
             .dx = xpos - last_xpos,
@@ -132,11 +218,22 @@ namespace GLFWEventHandlers
         last_ypos = ypos;
 
         EventRegistry::CreateEvent(
-            std::move(input));
+            std::move(event));
     };
     
     // cursor enters or leaves window
-    constexpr GLFWcursorenterfun cursor_enter_callback = nullptr;
+    constexpr GLFWcursorenterfun cursor_enter_callback = [](
+        GLFWwindow* /* window */,
+        int entered
+    ){
+        WindowEvent event = {
+            .action = entered ? WindowEvent::Action::MouseEnter
+                              : WindowEvent::Action::MouseLeave
+        };
+
+        EventRegistry::CreateEvent(
+            std::move(event));
+    };
 
     // scroll input
     constexpr GLFWscrollfun scroll_callback = [](
@@ -144,13 +241,13 @@ namespace GLFWEventHandlers
         double xoffset,
         double yoffset
     ){
-        MouseScrollInput input = {
+        MouseScrollEvent event = {
             .x = xoffset,
             .y = yoffset
         };
 
         EventRegistry::CreateEvent(
-            std::move(input));
+            std::move(event));
     };
 
     // file drop input

@@ -9,6 +9,7 @@
 #include "jac/print.hpp"
 
 #include "Renderer/Window.hpp"
+#include "Events/EventRegistry.hpp"
 
 struct Component
 {
@@ -68,6 +69,8 @@ auto run(jac::Arguments& /* arg */, jac::Arguments& /* env */) -> int
         // }
 
         // renderer.render();
+        
+        Events::EventRegistry::CleanUp();
         window.update();
     }
 

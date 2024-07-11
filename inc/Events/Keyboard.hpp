@@ -13,7 +13,7 @@ namespace Events
 {
 
 ECS_COMPONENT
-struct KeyboardInput
+struct KeyboardEvent
 {
     enum struct Action : uint8
     {
@@ -36,11 +36,11 @@ struct KeyboardInput
     int scancode;
 
     Action action;
-    uint mods;
+    uint8 mods;
 
     bool hasMod(Mod mod) const
     {
-        return (mods & static_cast<uint>(mod)) != 0;
+        return (mods & static_cast<uint8>(mod)) != 0;
     }
 };
 

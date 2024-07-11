@@ -51,7 +51,7 @@ cmake --build build
 - Event Handling
 - - ~~Integrate with ECS~~
 - - ~~Keyboard & Mouse input~~
-- - Window events
+- - ~~Window events~~
 - - Timers
 - - (Maybe) Gamepad input
 - - (Maybe) Networking

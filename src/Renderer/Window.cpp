@@ -51,14 +51,30 @@ auto init_glfw() -> bool
 
 auto set_event_callbacks(GLFWwindow* window) -> void
 {
-    namespace handlers = Events::GLFWEventHandlers;
+    using namespace Events::GLFWEventHandlers;
 
-    glfwSetFramebufferSizeCallback(window, handlers::framebuffer_size_callback);
+    glfwSetErrorCallback    (error_callback);
+    glfwSetMonitorCallback  (monitor_callback);
 
-    glfwSetKeyCallback(window, handlers::key_callback);
+    glfwSetWindowPosCallback            (window, window_pos_callback);
+    glfwSetWindowSizeCallback           (window, window_size_callback);
+    glfwSetWindowCloseCallback          (window, window_close_callback);
+    glfwSetWindowRefreshCallback        (window, window_refresh_callback);
+    glfwSetWindowFocusCallback          (window, window_focus_callback);
+    glfwSetWindowIconifyCallback        (window, window_iconify_callback);
+    glfwSetWindowMaximizeCallback       (window, window_maximize_callback);
+    glfwSetWindowContentScaleCallback   (window, window_content_scale_callback);
+    glfwSetFramebufferSizeCallback      (window, framebuffer_size_callback);
 
-    glfwSetMouseButtonCallback(window, handlers::mouse_button_callback);
-    glfwSetCursorPosCallback(window, handlers::cursor_pos_callback);
+    glfwSetKeyCallback          (window, key_callback);
+    glfwSetCharCallback         (window, char_callback);
+    glfwSetCharModsCallback     (window, char_mods_callback);
+    glfwSetMouseButtonCallback  (window, mouse_button_callback);
+    glfwSetCursorPosCallback    (window, cursor_pos_callback);
+    glfwSetCursorEnterCallback  (window, cursor_enter_callback);
+    glfwSetScrollCallback       (window, scroll_callback);
+    glfwSetDropCallback         (window, drop_callback);
+    glfwSetJoystickCallback     (joystick_callback);
 }
 
 } // namespace
@@ -107,11 +123,55 @@ auto Window::update() -> void
 
     glfwSwapBuffers(m_Window.get());
     glfwPollEvents();
+
+    handleWindowEvents();
 }
 
 auto Window::isAlive() const -> bool
 {
     return m_alive;
+}
+
+auto Window::handleWindowEvents() -> void
+{
+    using Events::EventRegistry;
+    using Events::WindowEvent;
+    using Action = Events::WindowEvent::Action;
+
+    auto events = EventRegistry::GetEvents<WindowEvent>();
+
+    for (auto [entity, event, window] : events.each())
+    {
+        switch (window.action){
+            case Action::Close:
+                m_alive = false;
+                break;
+            case Action::Refresh:
+            case Action::Focus:
+            case Action::LostFocus:
+            case Action::Maximize:
+            // case Action::Minimize:
+            case Action::Restore:
+            case Action::MouseEnter:
+            case Action::MouseLeave:
+            default:
+                break;
+        }
+        
+        event.handled = true;
+    }
+
+    auto size_events = EventRegistry::GetEvents<Events::WindowSizeEvent>();
+    for (auto [entity, event, size] : size_events.each())
+    {
+        event.handled = true;
+    }
+
+    auto framebuffer_events = EventRegistry::GetEvents<Events::FramebufferSizeEvent>();
+    for (auto [entity, event, size] : framebuffer_events.each())
+    {
+        event.handled = true;
+    }
 }
 
 } // namespace Renderer

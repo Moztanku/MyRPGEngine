@@ -13,7 +13,7 @@ namespace Events
 {
 
 ECS_COMPONENT
-struct MouseButtonInput
+struct MouseButtonEvent
 {
     enum struct Action : uint8
     {
@@ -38,7 +38,7 @@ struct MouseButtonInput
 };
 
 ECS_COMPONENT
-struct MouseMoveInput
+struct MouseMoveEvent
 {
     double x;
     double y;
@@ -48,7 +48,7 @@ struct MouseMoveInput
 };
 
 ECS_COMPONENT
-struct MouseScrollInput
+struct MouseScrollEvent
 {
     double x;
     double y;
