@@ -11,24 +11,8 @@
 #include "Renderer/Window.hpp"
 #include "Events/EventRegistry.hpp"
 
-struct Component
-{
-    static auto on_construct(entt::registry& /* registry */, entt::entity entity) -> void
-    {
-        jac::print_info({"Entity created: ", static_cast<int>(entity)});
-    }
-};
-
 auto run(jac::Arguments& /* arg */, jac::Arguments& /* env */) -> int
 {
-
-    // entt::registry registry{};
-    // registry.on_construct<Component>().connect<&Component::on_construct>();
-
-    // auto entity = registry.create();
-    // registry.emplace<Component>(entity);
-
-    // registry.create<Component>();
     // /*
     //     START:
 
@@ -52,7 +36,7 @@ auto run(jac::Arguments& /* arg */, jac::Arguments& /* env */) -> int
     // */
 
     Renderer::Window window{};
-    // // Renderer::Renderer renderer{window};
+    // Renderer::Renderer renderer{window};
 
     while (window.isAlive())
     {
@@ -73,22 +57,6 @@ auto run(jac::Arguments& /* arg */, jac::Arguments& /* env */) -> int
         Events::EventRegistry::CleanUp();
         window.update();
     }
-
-    // // entt::dispatcher dispatcher{};
-
-    // // dispatcher.sink<Event>().connect<&generic_event_handler>();
-    // // dispatcher.sink<Event>().connect<&EventHandler::on>(EventHandler{});
-    // // dispatcher.sink<Event>().connect<&handleEvent>();
-
-    // // dispatcher.trigger(
-    // //     Event{{1.0f, 2.0f}, {3.0f, 4.0f}}
-    // // );
-
-    // // dispatcher.enqueue<Event>(
-    // //     Event{{1.0f, 2.0f}, {3.0f, 4.0f}}
-    // // );
-
-    // // dispatcher.update();
 
     return 0;
 }

@@ -13,6 +13,7 @@
 #include "jac/print.hpp"
 
 #include "Events/Event.hpp"
+#include "utils/helper.hpp"
 
 namespace Events
 {
@@ -33,16 +34,15 @@ class EventRegistry
             (m_registry.emplace<Components>(event, std::forward<Components>(components)), ...);
         }
 
-        // TODO: Change this so that it doesn't return view at entities, but rather only the components.
-        //       This way we can't modify the entities, only its components and this functions interface
-        //       will be clearer.
         template<typename... Components>
         static auto GetEvents()
         {
             if constexpr (std::disjunction_v<std::is_same<Events::Event, Components>...>)
                 jac::print_error("Event component should not be passed to GetEvents() function manually!");
 
-            return m_registry.view<Events::Event, Components...>();
+            auto view = m_registry.view<Events::Event, Components...>();
+
+            return utils::custom_iterable_adaptor{view.each()};
         }
     
         static auto CleanUp() -> void

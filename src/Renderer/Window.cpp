@@ -136,11 +136,11 @@ auto Window::handleWindowEvents() -> void
 {
     using Events::EventRegistry;
     using Events::WindowEvent;
+    using Events::WindowSizeEvent;
+    using Events::FramebufferSizeEvent;
     using Action = Events::WindowEvent::Action;
 
-    auto events = EventRegistry::GetEvents<WindowEvent>();
-
-    for (auto [entity, event, window] : events.each())
+    for (auto [event, window] : EventRegistry::GetEvents<WindowEvent>())
     {
         switch (window.action){
             case Action::Close:
@@ -161,14 +161,12 @@ auto Window::handleWindowEvents() -> void
         event.handled = true;
     }
 
-    auto size_events = EventRegistry::GetEvents<Events::WindowSizeEvent>();
-    for (auto [entity, event, size] : size_events.each())
+    for (auto [event, size] : EventRegistry::GetEvents<WindowSizeEvent>())
     {
         event.handled = true;
     }
 
-    auto framebuffer_events = EventRegistry::GetEvents<Events::FramebufferSizeEvent>();
-    for (auto [entity, event, size] : framebuffer_events.each())
+    for (auto [event, size] : EventRegistry::GetEvents<FramebufferSizeEvent>())
     {
         event.handled = true;
     }
