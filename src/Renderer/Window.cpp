@@ -170,6 +170,15 @@ auto Window::handleWindowEvents() -> void
     {
         event.handled = true;
     }
+
+    for (auto [event, key] : EventRegistry::GetEvents<Events::KeyboardEvent>())
+    {
+        if (key.key == GLFW_KEY_ESCAPE && key.action == Events::KeyboardEvent::Action::Press)
+        {
+            m_alive = false;
+            event.handled = true;
+        }
+    }
 }
 
 } // namespace Renderer

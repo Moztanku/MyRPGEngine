@@ -2,7 +2,7 @@
  * @file GLFWEventHandlers.hpp
  * @author Moztanku (mostankpl@gmail.com)
  * @brief This file contains basic event handlers for GLFS window events like key presses, mouse movement, etc.
- * These handlers are used to capture and send events into ECS to be processed by appropiate systems.
+ *      These handlers are used to capture and send events into ECS to be processed by appropiate systems.
  */
 #pragma once
 
@@ -59,7 +59,7 @@ namespace GLFWEventHandlers
             .height = static_cast<uint32>(height)
         };
 
-        EventRegistry::CreateEvent(
+        EventRegistry::CreateUniqueEvent(
             std::move(event));
     };
 
@@ -149,7 +149,7 @@ namespace GLFWEventHandlers
             .height = static_cast<uint32>(height)
         };
 
-        EventRegistry::CreateEvent(
+        EventRegistry::CreateUniqueEvent(
             std::move(event));
     };
 
@@ -217,7 +217,7 @@ namespace GLFWEventHandlers
         last_xpos = xpos;
         last_ypos = ypos;
 
-        EventRegistry::CreateEvent(
+        EventRegistry::CreateUniqueEvent(
             std::move(event));
     };
     
@@ -246,7 +246,7 @@ namespace GLFWEventHandlers
             .y = yoffset
         };
 
-        EventRegistry::CreateEvent(
+        EventRegistry::CreateUniqueEvent(
             std::move(event));
     };
 

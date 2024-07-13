@@ -40,6 +40,7 @@ cmake --build build
 - - Particles
 - - GUI
 - - Custom shaders support
+- - Vulkan support
 - - (Maybe) Lighting
 - - (Maybe) Add 2.5D mode
 - Audio
