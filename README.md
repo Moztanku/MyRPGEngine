@@ -34,6 +34,7 @@ cmake --build build
 - - Stats
 - - Combat
 - Rendering
+- - Camera
 - - Tilemap with layers
 - - Sprites with animations
 - - Text
@@ -66,3 +67,4 @@ cmake --build build
 - - Dialogue editor
 - - Script editor
 - - Etc.
+- Resource Manager

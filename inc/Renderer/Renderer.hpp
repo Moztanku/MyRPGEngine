@@ -20,6 +20,19 @@
 namespace Renderer
 {
 
+/*
+    Rendering order:
+        - Level background
+        - Tilemaps with different layers differenciated by z-axis
+        - Sprites (iterate through ECS objects e.g. "Drawable")
+        - UI (also based on ECS)
+    Properties:
+        - Orthogonal projection (2D view from above, z-axis used to know what goes above what)
+        - Skip layers which are outside of view or hidden
+        - Same with sprites
+        - 1 draw call per tilemap layer, 1 draw call per sprite (batch entities using the same sprites)
+*/
+
 class Renderer
 {
     public:
@@ -39,11 +52,16 @@ class Renderer
             glEnable(GL_BLEND);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+            // Remove later
             m_Shader = new GPU::Shader(
                 "res/shaders/sample_shader.vert",
                 "res/shaders/sample_shader.frag");
 
             m_Texture = new GPU::Texture("res/tilesets/32x32.png");
+
+            m_tilemap_shader = new GPU::Shader(
+                "res/shaders/tilemap_layer.vert",
+                "res/shaders/tilemap_layer.frag");
         }
 
         ~Renderer()
@@ -77,6 +95,7 @@ class Renderer
         Window& m_Window;
 
         // Remove later
+        GPU::Shader* m_tilemap_shader;
         GPU::Shader* m_Shader;
         GPU::Texture* m_Texture;
 };
